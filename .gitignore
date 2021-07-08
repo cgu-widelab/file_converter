@@ -1,0 +1,9 @@
+.idea/
+.vscode/
+node_modules/
+
+data/*
+!data/useless
+data/useless/*
+!data/useless/.gitkeep
+.DS_Store

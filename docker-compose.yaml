@@ -1,0 +1,47 @@
+version: "3.9"
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+  upload-node:
+    build:
+      context: ./upload
+      dockerfile: Dockerfile
+    image: "money626/upload-node"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./data:/share
+    ports:
+      - 3000:3000
+      - 8787:8787
+    command: "npm start"
+  transformer-node:
+    build:
+      context: ./transformer
+      dockerfile: Dockerfile
+    image: "money626/ffmpeg-node"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./data:/share
+    ports:
+      - 8081:8081
+    command: "npm start"
+  image-transformer-node:
+    build:
+      context: ./image_transformer
+      dockerfile: Dockerfile
+    environment:
+      - FLASK_APP=main.py
+    ports:
+      - 8082:5000
+    volumes:
+      - ./data:/share
